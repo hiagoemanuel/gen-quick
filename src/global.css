@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h3 {
+    @apply text-xl;
+  }
+}
+
 * {
   font-family: "Saira", sans-serif;
   font-weight: 400;

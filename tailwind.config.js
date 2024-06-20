@@ -7,7 +7,12 @@ export default {
       light: '#FAFAFA',
       grey: '#27272A',
     },
-    extend: {},
+    borderRadius: { DEFAULT: '6px' },
+    extend: {
+      screens: {
+        xs: '480px',
+      },
+    },
   },
   plugins: [],
 }
