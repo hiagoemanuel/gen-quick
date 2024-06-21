@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    @apply transition-colors;
+  }
+
   h3 {
     @apply text-xl;
   }
@@ -11,10 +15,15 @@
 * {
   font-family: "Saira", sans-serif;
   font-weight: 400;
-  color: theme(colors.dark);
+  color: var(--dark);
 }
 
 :root {
   --dark: theme(colors.dark);
   --light: theme(colors.light);
+}
+
+html.dark {
+  --dark: theme(colors.light);
+  --light: theme(colors.dark)
 }
