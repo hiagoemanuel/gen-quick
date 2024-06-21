@@ -27,3 +27,16 @@ html.dark {
   --dark: theme(colors.light);
   --light: theme(colors.dark)
 }
+
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark);
+  border-radius: 6px;
+}
