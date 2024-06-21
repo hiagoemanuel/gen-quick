@@ -36,11 +36,15 @@ export const Button = ({ icon, label, color, wSize = 'w-fit' }: ButtonProps) => 
       ref={buttonRef}
     >
       <icon.type />
-      <h3
-        className={`font-medium ${color === 'dark' ? 'text-light dark:text-dark' : 'text-dark dark:text-light'}`}
-      >
-        {label}
-      </h3>
+      {label ? (
+        <h3
+          className={`font-medium ${color === 'dark' ? 'text-light dark:text-dark' : 'text-dark dark:text-light'}`}
+        >
+          {label}
+        </h3>
+      ) : (
+        <></>
+      )}
     </button>
   )
 }
