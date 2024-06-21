@@ -6,8 +6,15 @@ export default {
       dark: '#09090B',
       light: '#FAFAFA',
       grey: '#27272A',
+      hover: {
+        dark: '#27272A',
+        light: '#FAFAFAE6',
+      },
     },
-    borderRadius: { DEFAULT: '6px' },
+    borderRadius: {
+      DEFAULT: '0.375rem',
+      xl: '1.5rem',
+    },
     extend: {
       screens: {
         xs: '480px',

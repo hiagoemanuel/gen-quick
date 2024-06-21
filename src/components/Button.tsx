@@ -32,11 +32,11 @@ export const Button = ({ icon, label, color, wSize = 'w-fit' }: ButtonProps) => 
 
   return (
     <button
-      className={`p-3 flex justify-center items-center gap-3 rounded ${wSize} ${color === 'dark' ? 'bg-dark' : 'bg-light'}`}
+      className={`p-3 flex justify-center items-center gap-3 rounded transition-colors duration-200 ${wSize} ${color === 'dark' ? 'bg-dark hover:bg-hover-dark' : 'bg-light hover:bg-hover-light'}`}
       ref={buttonRef}
     >
       <icon.type />
-      <h3 className={color === 'dark' ? 'text-light' : 'text-dark'}>{label}</h3>
+      <h3 className={`font-medium ${color === 'dark' ? 'text-light' : 'text-dark'}`}>{label}</h3>
     </button>
   )
 }
