@@ -27,9 +27,7 @@ export const Header = () => {
           <Button icon={<GitHub />} label="GitHub" color="dark" />
         </a>
         <Button icon={<History />} label="Histórico" color="dark" />
-        <div onClick={switchTheme}>
-          <Button icon={<Theme />} label="Tema" color="dark" />
-        </div>
+        <Button onClick={switchTheme} icon={<Theme />} label="Tema" color="dark" />
       </nav>
     </header>
   )

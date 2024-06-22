@@ -15,8 +15,8 @@ export const QrGenerator = () => {
             </div>
           </div>
           <div className="flex gap-1">
-            <Button color="dark" icon={<Share />} label="Compartilhar" wSize="w-full" />
-            <Button color="dark" icon={<Edit />} label="" wSize="w-fit" />
+            <Button className="w-full" color="dark" icon={<Share />} label="Compartilhar" />
+            <Button color="dark" icon={<Edit />} label={false} />
           </div>
         </div>
         <form className="w-full max-w-xl px-4 lg:self-end">
@@ -24,7 +24,12 @@ export const QrGenerator = () => {
             className="w-full h-48 p-2 border-4 rounded mb-2 border-dark dark:border-light dark:bg-dark text-xl text-dark dark:text-light placeholder:text-dark dark:placeholder:text-light resize-none outline-none"
             placeholder="Insira seu texto *"
           />
-          <Button color="dark" icon={<QrCode />} label="Gerar Código QR" wSize="w-full" />
+          <Button
+            className="w-full lg:w-96 lg:ml-auto"
+            color="dark"
+            icon={<QrCode />}
+            label="Gerar Código QR"
+          />
         </form>
       </div>
     </main>

@@ -1,15 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { ComponentProps, useEffect, useRef } from 'react'
 
-interface ButtonProps {
+interface ButtonProps extends ComponentProps<'button'> {
   icon: JSX.Element
-  label: string
+  label: string | false
   color: 'dark' | 'light'
-  wSize?: 'w-fit' | 'w-full'
 }
 
-export const Button = ({ icon, label, color, wSize = 'w-fit' }: ButtonProps) => {
+export const Button = ({ icon, label, color, ...rest }: ButtonProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
-
   useEffect(() => {
     const icon = buttonRef.current?.children[0].children
     if (!icon) return
@@ -32,7 +30,8 @@ export const Button = ({ icon, label, color, wSize = 'w-fit' }: ButtonProps) => 
 
   return (
     <button
-      className={`p-3 flex justify-center items-center gap-3 rounded transition-colors duration-200 ${wSize} ${color === 'dark' ? 'bg-dark dark:bg-light hover:bg-hover-dark dark:hover:bg-hover-light' : 'bg-light dark:bg-dark hover:bg-hover-light dark:hover:bg-hover-dark'}`}
+      {...rest}
+      className={`${rest.className} p-3 flex justify-center items-center gap-3 rounded transition-colors duration-200 ${color === 'dark' ? 'bg-dark dark:bg-light hover:bg-hover-dark dark:hover:bg-hover-light' : 'bg-light dark:bg-dark hover:bg-hover-light dark:hover:bg-hover-dark'}`}
       ref={buttonRef}
     >
       <icon.type />

@@ -18,7 +18,7 @@ export const Menu = () => {
     <AnimatePresence>
       {isOpen && (
         <motion.section
-          className="fixed top-0 left-0 w-full h-svh bg-dark/50 dark:bg-light/5 xs:hidden flex flex-col justify-end z-40"
+          className="fixed top-0 left-0 w-full h-svh bg-dark/50 xs:hidden flex flex-col justify-end z-40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { delay: 0.25 } }}
@@ -32,17 +32,19 @@ export const Menu = () => {
             transition={{ duration: 0.25, ease: 'easeInOut' }}
           >
             <div className="pb-3 border-b-2 border-b-grey mb-3 flex flex-col gap-2">
-              <div onClick={switchTheme}>
-                <Button icon={<Theme />} label="Mudar Tema" color="light" wSize="w-full" />
-              </div>
-              <Button icon={<History />} label="Histórico" color="light" wSize="w-full" />
+              <Button onClick={switchTheme} icon={<Theme />} label="Mudar Tema" color="light" />
+              <Button icon={<History />} label="Histórico" color="light" />
               <a href="https://github.com/hiagoemanuel/gen-quick" target="_blank">
-                <Button icon={<Github />} label="GitHub" color="light" wSize="w-full" />
+                <Button className="w-full" icon={<Github />} label="GitHub" color="light" />
               </a>
             </div>
-            <div onClick={() => setIsOpen(false)}>
-              <Button icon={<Close />} label="Fechar Menu" color="light" wSize="w-full" />
-            </div>
+            <Button
+              className="w-full"
+              onClick={() => setIsOpen(false)}
+              icon={<Close />}
+              label="Fechar Menu"
+              color="light"
+            />
           </motion.div>
         </motion.section>
       )}
