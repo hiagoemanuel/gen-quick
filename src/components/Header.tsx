@@ -14,7 +14,7 @@ export const Header = () => {
   const { switchTheme } = useContext(ThemeContext)
 
   return (
-    <header className="p-4 xs:max-sm:px-1 gap-2 flex justify-between items-center">
+    <header className="sticky xs:static bottom-0 border-t-2 xs:border-t-0 border-grey bg-light dark:bg-dark p-4 xs:max-sm:px-1 gap-2 flex justify-between items-center">
       <Logo />
       <button
         onClick={() => setIsOpen(true)}
