@@ -3,8 +3,13 @@ import { Button } from './Button'
 import Share from '../assets/share.svg'
 import Edit from '../assets/edit.svg'
 import QrCode from '../assets/qrCode.svg'
+import { ShareModal } from './ShareModal'
+import { useModal } from '../hooks/useModal'
 
 export const QrGenerator = () => {
+  const share = useModal()
+  const edit = useModal()
+
   return (
     <main className="grow py-1 flex justify-center items-center">
       <div className="w-full flex flex-col lg:flex-row justify-center items-center gap-4">
@@ -15,8 +20,14 @@ export const QrGenerator = () => {
             </div>
           </div>
           <div className="flex gap-1">
-            <Button className="w-full" color="dark" icon={<Share />} label="Compartilhar" />
-            <Button color="dark" icon={<Edit />} label={false} />
+            <Button
+              className="w-full"
+              onClick={share.openModal}
+              color="dark"
+              icon={<Share />}
+              label="Compartilhar"
+            />
+            <Button onClick={edit.closeModal} color="dark" icon={<Edit />} label={false} />
           </div>
         </div>
         <form className="w-full max-w-xl px-4 lg:self-end">
@@ -32,6 +43,7 @@ export const QrGenerator = () => {
           />
         </form>
       </div>
+      <ShareModal hook={share} />
     </main>
   )
 }
