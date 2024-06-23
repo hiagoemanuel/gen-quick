@@ -15,7 +15,7 @@ export const HeaderHistory = ({ historyIsOpen, setHistoryIsOpen }: HeaderHistory
     <AnimatePresence>
       {historyIsOpen && (
         <motion.section
-          className="fixed top-0 left-0 w-full h-svh bg-dark/50 hidden xs:flex justify-center items-center z-40"
+          className="fixed top-0 left-0 w-full h-svh bg-dark/50 hidden xs:flex justify-center h-xs:items-center items-end z-40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { delay: 0.25 } }}
@@ -28,7 +28,11 @@ export const HeaderHistory = ({ historyIsOpen, setHistoryIsOpen }: HeaderHistory
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
-            <div className="pb-3 border-b-2 border-b-grey mb-3 flex flex-col gap-2">
+            <div className="pb-3 max-h-64 border-b-2 border-b-grey mb-3 flex flex-col gap-2 overflow-y-scroll no-scroll">
+              <HistoryButton label="hiagoemanuelhiagoemanuelhiago" />
+              <HistoryButton label="hiagoemanuel" />
+              <HistoryButton label="hiagoemanuel" />
+              <HistoryButton label="hiagoemanuel" />
               <HistoryButton label="hiagoemanuel" />
               <HistoryButton label="hiagoemanuel" />
               <HistoryButton label="hiagoemanuel" />
