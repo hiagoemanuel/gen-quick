@@ -5,6 +5,7 @@ import Edit from '../assets/edit.svg'
 import QrCode from '../assets/qrCode.svg'
 import { ShareModal } from './ShareModal'
 import { useModal } from '../hooks/useModal'
+import { EditModal } from './EditModal'
 
 export const QrGenerator = () => {
   const share = useModal()
@@ -27,7 +28,7 @@ export const QrGenerator = () => {
               icon={<Share />}
               label="Compartilhar"
             />
-            <Button onClick={edit.closeModal} color="dark" icon={<Edit />} label={false} />
+            <Button onClick={edit.openModal} color="dark" icon={<Edit />} label={false} />
           </div>
         </div>
         <form className="w-full max-w-xl px-4 lg:self-end">
@@ -44,6 +45,7 @@ export const QrGenerator = () => {
         </form>
       </div>
       <ShareModal hook={share} />
+      <EditModal hook={edit} />
     </main>
   )
 }

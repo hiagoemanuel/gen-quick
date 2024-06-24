@@ -30,13 +30,7 @@ export const Modal = ({ children, title, hook }: ModalProps) => {
           >
             <header className="pb-2 mb-2 border-b-2 border-grey flex items-center gap-5">
               <h2 className="grow text-light dark:text-dark text-xl font-medium">{title}</h2>
-              <Button
-                className="w-8 h-8 p-0"
-                onClick={hook.closeModal}
-                color="dark"
-                icon={<Close />}
-                label=""
-              />
+              <Button onClick={hook.closeModal} color="dark" icon={<Close />} label="" />
             </header>
             {children}
           </motion.div>

@@ -5,7 +5,7 @@ import { ThemeProvider } from './contexts/ThemeContext'
 
 function App() {
   return (
-    <section className="w-full max-w-7xl min-h-svh mx-auto flex flex-col xs:flex-col-reverse relative">
+    <section className="w-full max-w-7xl min-h-svh mx-auto flex flex-col xs:flex-col-reverse">
       <QrGenerator />
       <ThemeProvider>
         <Header />
