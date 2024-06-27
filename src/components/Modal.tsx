@@ -16,7 +16,7 @@ export const Modal = ({ children, title, hook }: ModalProps) => {
     <AnimatePresence>
       {hook.isOpen && (
         <motion.section
-          className="absolute top-0 left-0 w-full h-svh bg-dark/50 z-40 flex justify-center items-center"
+          className="fixed top-0 left-0 w-full h-svh bg-dark/50 z-40 flex justify-center items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
