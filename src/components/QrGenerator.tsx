@@ -9,18 +9,26 @@ import QrCode from '../assets/qrCode.svg'
 import { ShareModal } from './ShareModal'
 import { useModal } from '../hooks/useModal'
 import { EditModal } from './EditModal'
-import { useRef } from 'react'
+import { useContext, useRef, useState } from 'react'
+import { QrColorsContext } from '../contexts/QrColorsContext'
 
 type formParams = { text: string }
 
 export const QrGenerator = () => {
   const { handleSubmit, register } = useForm<formParams>()
-  const qrRef = useRef(null)
+  const { bgColor, qrColor } = useContext(QrColorsContext)
+  const qrRef = useRef<HTMLCanvasElement>(null)
+  const [isGenerated, setIsGenerated] = useState<boolean>(false)
   const share = useModal()
   const edit = useModal()
 
   const generateQr: SubmitHandler<formParams> = async ({ text }) => {
-    await toCanvas(qrRef.current, text, { width: 216, margin: 1 })
+    await toCanvas(qrRef.current, text, {
+      width: 216,
+      margin: 1,
+      color: { dark: qrColor, light: bgColor },
+    })
+    setIsGenerated(true)
   }
 
   return (
@@ -28,10 +36,12 @@ export const QrGenerator = () => {
       <div className="w-full flex flex-col lg:flex-row justify-center items-center gap-4">
         <div>
           <div className="w-72 h-72 p-8 border-4 mb-2 rounded border-dark dark:border-light">
-            <canvas
-              className="w-full h-full bg-dark/50 dark:bg-light/50 flex justify-center items-center"
-              ref={qrRef}
-            />
+            <canvas ref={qrRef} width={0} height={0} />
+            {!isGenerated && (
+              <div className="w-full h-full p-8 border-[2rem] border-dark dark:border-light">
+                <div className="w-full h-full bg-dark dark:bg-light" />
+              </div>
+            )}
           </div>
           <div className="flex gap-1">
             <Button

@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react'
-import { useLocalStorage } from '../hooks/localStorage'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
 interface ThemeContextProps {
   isDark: boolean
