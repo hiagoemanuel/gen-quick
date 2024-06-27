@@ -7,6 +7,7 @@ export default {
       dark: '#09090B',
       light: '#FAFAFA',
       grey: '#27272A',
+      error: '#E13B3B',
       hover: {
         dark: '#27272A',
         light: '#FAFAFAE6',

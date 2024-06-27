@@ -62,6 +62,7 @@ export const QrGenerator = () => {
           />
           <Button
             className="w-full lg:w-96 lg:ml-auto"
+            type="submit"
             color="dark"
             icon={<QrCode />}
             label="Gerar Código QR"
