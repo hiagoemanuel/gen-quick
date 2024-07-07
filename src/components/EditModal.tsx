@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form'
 
 import { QrColorsContext } from '../contexts/QrColorsContext'
@@ -9,25 +9,56 @@ import { Modal } from './Modal'
 import Edit from '../assets/edit.svg'
 
 type UpdateColorForm = {
-  bgColor: string
-  qrColor: string
+  background: { inputColor: string; inputText: string }
+  qrcode: { inputColor: string; inputText: string }
 }
 
 export const EditModal = ({ hook }: { hook: useModalProps }) => {
+  const [prevColor, setPrevColor] = useState<string>('')
   const { bgColor, qrColor, setBgColor, setQrColor } = useContext(QrColorsContext)
   const {
     handleSubmit,
     register,
     watch,
     setError,
+    setValue,
     formState: { errors },
-  } = useForm<UpdateColorForm>()
+  } = useForm<UpdateColorForm>({
+    defaultValues: {
+      background: { inputColor: bgColor, inputText: bgColor },
+      qrcode: { inputColor: qrColor, inputText: qrColor },
+    },
+  })
 
-  useEffect(() => watch((v) => v).unsubscribe(), [watch])
+  const inputsWatch = watch()
 
-  const updateColors: SubmitHandler<UpdateColorForm> = ({ bgColor, qrColor }) => {
-    setBgColor(bgColor)
-    setQrColor(qrColor)
+  useEffect(() => {
+    const watchBackground = watch('background')
+    const watchQrcode = watch('qrcode')
+
+    const watches = [watchBackground, watchQrcode]
+
+    watches.map((watch, index) => {
+      const currentWatch = watch === watchBackground ? 'background' : 'qrcode'
+
+      if (watch.inputColor !== watches[index].inputText) {
+        if (watch.inputColor !== prevColor) {
+          setValue(`${currentWatch}.inputText`, watch.inputColor)
+          setPrevColor(watch.inputColor)
+          return
+        }
+        if (watch.inputText !== prevColor) {
+          setValue(`${currentWatch}.inputColor`, watch.inputText)
+          setPrevColor(watch.inputText)
+          return
+        }
+      }
+    })
+  }, [prevColor, inputsWatch, setValue, watch])
+
+  const updateColors: SubmitHandler<UpdateColorForm> = ({ background, qrcode }) => {
+    setBgColor(background.inputColor)
+    setQrColor(qrcode.inputColor)
     hook.closeModal()
   }
 
@@ -40,30 +71,35 @@ export const EditModal = ({ hook }: { hook: useModalProps }) => {
       <form className="flex flex-col gap-2" onSubmit={handleSubmit(updateColors, errorHandler)}>
         <div className="flex flex-col xs:flex-row items-center gap-2">
           <div className="flex gap-1">
-            <div
-              className="w-12 h-12 rounded border-2 border-light dark:border-dark"
-              style={{ background: watch().bgColor ?? bgColor }}
-            />
+            <div className="w-12 h-12 rounded border-2 border-light dark:border-dark overflow-hidden">
+              <input
+                className="p-0 w-[150%] h-[150%] -m-[25%]"
+                type="color"
+                {...register('background.inputColor', { required: true })}
+              />
+            </div>
             <div>
               <h5 className="text-xs text-light dark:text-dark">Cor de Fundo</h5>
               <input
                 className="w-32 px-1 outline-none rounded border-2 border-light dark:border-dark bg-dark dark:bg-light text-lg text-light dark:text-dark"
-                defaultValue={bgColor}
                 type="text"
                 autoComplete="off"
-                maxLength={9}
-                {...register('bgColor', {
-                  pattern: /^#[0-9A-F]{6}[0-9a-f]{0,2}$/i,
+                maxLength={7}
+                {...register('background.inputText', {
                   required: true,
+                  pattern: /^#[0-9A-F]{6}$/i,
                 })}
               />
             </div>
           </div>
           <div className="flex gap-1">
-            <div
-              className="w-12 h-12 rounded border-2 border-light dark:border-dark"
-              style={{ background: watch().qrColor ?? qrColor }}
-            />
+            <div className="w-12 h-12 rounded border-2 border-light dark:border-dark overflow-hidden">
+              <input
+                className="p-0 w-[150%] h-[150%] -m-[25%]"
+                type="color"
+                {...register('qrcode.inputColor', { required: true })}
+              />
+            </div>
             <div>
               <h5 className="text-xs text-light dark:text-dark">Código QR</h5>
               <input
@@ -71,9 +107,9 @@ export const EditModal = ({ hook }: { hook: useModalProps }) => {
                 defaultValue={qrColor}
                 type="text"
                 autoComplete="off"
-                maxLength={9}
-                {...register('qrColor', {
-                  pattern: /^#[0-9A-F]{6}[0-9a-f]{0,2}$/i,
+                maxLength={7}
+                {...register('qrcode.inputText', {
+                  pattern: /^#[0-9A-F]{6}$/i,
                   required: true,
                 })}
               />
