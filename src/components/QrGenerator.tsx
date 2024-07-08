@@ -1,3 +1,4 @@
+import { useContext, useEffect, useRef, useState } from 'react'
 import { toCanvas } from 'qrcode'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -9,7 +10,6 @@ import QrCode from '../assets/qrCode.svg'
 import { ShareModal } from './ShareModal'
 import { useModal } from '../hooks/useModal'
 import { EditModal } from './EditModal'
-import { useContext, useRef, useState } from 'react'
 import { QrColorsContext } from '../contexts/QrColorsContext'
 
 type formParams = { text: string }
@@ -22,12 +22,27 @@ export const QrGenerator = () => {
   const share = useModal()
   const edit = useModal()
 
-  const generateQr: SubmitHandler<formParams> = async ({ text }) => {
-    await toCanvas(qrRef.current, text, {
+  const text = new URLSearchParams(location.search).get('text')
+
+  useEffect(() => {
+    if (text) generateQr({ text })
+  })
+
+  const generateQr: SubmitHandler<formParams> = async ({ text: textParam }) => {
+    await toCanvas(qrRef.current, textParam, {
       width: 216,
       margin: 1,
       color: { dark: qrColor, light: bgColor },
     })
+
+    const urlParams = new URLSearchParams(location.search)
+
+    urlParams.set('text', textParam)
+    const url = new URL(location.href)
+    url.search = urlParams.toString()
+    console.log(url)
+    history.pushState({}, '', url)
+
     setIsGenerated(true)
   }
 
@@ -58,6 +73,7 @@ export const QrGenerator = () => {
           <textarea
             className="w-full h-48 p-2 border-4 rounded mb-2 border-dark dark:border-light dark:bg-dark text-xl text-dark dark:text-light placeholder:text-dark dark:placeholder:text-light resize-none outline-none"
             {...register('text')}
+            defaultValue={text ?? ''}
             placeholder="Insira seu texto *"
           />
           <Button
