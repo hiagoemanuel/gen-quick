@@ -11,20 +11,21 @@ import { ShareModal } from './ShareModal'
 import { useModal } from '../hooks/useModal'
 import { EditModal } from './EditModal'
 import { QrColorsContext } from '../contexts/QrColorsContext'
+import { useQueryParams } from '../hooks/useQueryParams'
 
 type formParams = { text: string }
 
 export const QrGenerator = () => {
-  const { handleSubmit, register } = useForm<formParams>()
-  const { bgColor, qrColor } = useContext(QrColorsContext)
-  const qrRef = useRef<HTMLCanvasElement>(null)
   const [isGenerated, setIsGenerated] = useState<boolean>(false)
+  const qrRef = useRef<HTMLCanvasElement>(null)
   const share = useModal()
   const edit = useModal()
-
-  const text = new URLSearchParams(location.search).get('text')
+  const { bgColor, qrColor } = useContext(QrColorsContext)
+  const { handleSubmit, register } = useForm<formParams>()
+  const { getQueryParams, setQueryParams } = useQueryParams()
 
   useEffect(() => {
+    const text = getQueryParams('text')
     if (text) generateQr({ text })
   })
 
@@ -35,14 +36,7 @@ export const QrGenerator = () => {
       color: { dark: qrColor, light: bgColor },
     })
 
-    const urlParams = new URLSearchParams(location.search)
-
-    urlParams.set('text', textParam)
-    const url = new URL(location.href)
-    url.search = urlParams.toString()
-    console.log(url)
-    history.pushState({}, '', url)
-
+    setQueryParams('text', textParam)
     setIsGenerated(true)
   }
 
@@ -73,7 +67,7 @@ export const QrGenerator = () => {
           <textarea
             className="w-full h-48 p-2 border-4 rounded mb-2 border-dark dark:border-light dark:bg-dark text-xl text-dark dark:text-light placeholder:text-dark dark:placeholder:text-light resize-none outline-none"
             {...register('text')}
-            defaultValue={text ?? ''}
+            defaultValue={getQueryParams('text') ?? ''}
             placeholder="Insira seu texto *"
           />
           <Button
