@@ -12,8 +12,9 @@ import { useModal } from '../hooks/useModal'
 import { EditModal } from './EditModal'
 import { QrColorsContext } from '../contexts/QrColorsContext'
 import { useQueryParams } from '../hooks/useQueryParams'
+import { HistoryContext } from '../contexts/HistoryContext'
 
-type formParams = { text: string }
+type formParams = { text: string; saveInHistory?: boolean }
 
 export const QrGenerator = () => {
   const [isGenerated, setIsGenerated] = useState<boolean>(false)
@@ -21,6 +22,7 @@ export const QrGenerator = () => {
   const share = useModal()
   const edit = useModal()
   const { bgColor, qrColor } = useContext(QrColorsContext)
+  const { storeInHistory } = useContext(HistoryContext)
   const { handleSubmit, register } = useForm<formParams>()
   const { getQueryParams, setQueryParams } = useQueryParams()
 
@@ -29,14 +31,16 @@ export const QrGenerator = () => {
     if (text) generateQr({ text })
   })
 
-  const generateQr: SubmitHandler<formParams> = async ({ text: textParam }) => {
+  const generateQr: SubmitHandler<formParams> = async ({ text: textParam, saveInHistory }) => {
     await toCanvas(qrRef.current, textParam, {
       width: 216,
       margin: 1,
       color: { dark: qrColor, light: bgColor },
     })
+    const queryParams = setQueryParams('text', textParam)
 
-    setQueryParams('text', textParam)
+    if (saveInHistory) storeInHistory({ href: queryParams, text: textParam })
+
     setIsGenerated(true)
   }
 
@@ -64,6 +68,7 @@ export const QrGenerator = () => {
           </div>
         </div>
         <form className="w-full max-w-xl px-4 lg:self-end" onSubmit={handleSubmit(generateQr)}>
+          <span {...register('saveInHistory', { value: true })} />
           <textarea
             className="w-full h-48 p-2 border-4 rounded mb-2 border-dark dark:border-light dark:bg-dark text-xl text-dark dark:text-light placeholder:text-dark dark:placeholder:text-light resize-none outline-none"
             {...register('text')}
