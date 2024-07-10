@@ -4,6 +4,8 @@ import { HistoryButton } from './HistoryButton'
 import { Button } from './Button'
 
 import Close from '../assets/close.svg'
+import { useContext } from 'react'
+import { HistoryContext } from '../contexts/HistoryContext'
 
 interface HeaderHistoryProps {
   historyIsOpen: boolean
@@ -11,6 +13,8 @@ interface HeaderHistoryProps {
 }
 
 export const HeaderHistory = ({ historyIsOpen, setHistoryIsOpen }: HeaderHistoryProps) => {
+  const { storedHistory } = useContext(HistoryContext)
+
   return (
     <AnimatePresence>
       {historyIsOpen && (
@@ -29,15 +33,9 @@ export const HeaderHistory = ({ historyIsOpen, setHistoryIsOpen }: HeaderHistory
             transition={{ duration: 0.25 }}
           >
             <div className="pb-3 max-h-64 border-b-2 border-b-grey mb-3 flex flex-col gap-2 overflow-y-scroll no-scroll">
-              <HistoryButton label="hiagoemanuelhiagoemanuelhiago" />
-              <HistoryButton label="hiagoemanuel" />
-              <HistoryButton label="hiagoemanuel" />
-              <HistoryButton label="hiagoemanuel" />
-              <HistoryButton label="hiagoemanuel" />
-              <HistoryButton label="hiagoemanuel" />
-              <HistoryButton label="hiagoemanuel" />
-              <HistoryButton label="hiagoemanuel" />
-              <HistoryButton label="hiagoemanuel" />
+              {storedHistory.map((qr, i) => (
+                <HistoryButton {...qr} key={i} />
+              ))}
             </div>
             <Button
               className="w-full"

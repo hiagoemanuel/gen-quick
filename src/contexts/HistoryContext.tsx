@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 interface qrcode {
@@ -30,10 +30,6 @@ export const HistoryProvider = ({ children }: { children: React.ReactNode }) => 
     setStoredHistory([qrcode, ...storedHistory])
     setStorage('history.gen-quick', JSON.stringify([qrcode, ...storedHistory]))
   }
-
-  useEffect(() => {
-    console.log(storedHistory)
-  }, [storedHistory])
 
   return (
     <HistoryContext.Provider value={{ storedHistory, storeInHistory }}>
