@@ -33,9 +33,13 @@ export const HeaderHistory = ({ historyIsOpen, setHistoryIsOpen }: HeaderHistory
             transition={{ duration: 0.25 }}
           >
             <div className="pb-3 max-h-64 border-b-2 border-b-grey mb-3 flex flex-col gap-2 overflow-y-scroll no-scroll">
-              {storedHistory.map((qr, i) => (
-                <HistoryButton {...qr} key={i} />
-              ))}
+              {storedHistory.length !== 0 ? (
+                storedHistory.map((qr, i) => <HistoryButton {...qr} key={i} />)
+              ) : (
+                <p className="text-light dark:text-dark text-center">
+                  Nenhuma atividade encontrada
+                </p>
+              )}
             </div>
             <Button
               className="w-full"

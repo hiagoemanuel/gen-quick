@@ -39,7 +39,15 @@ export const QrGenerator = () => {
     })
     const queryParams = setQueryParams('text', textParam)
 
-    if (saveInHistory) storeInHistory({ href: queryParams, text: textParam })
+    if (saveInHistory)
+      storeInHistory({
+        href: queryParams,
+        text: textParam,
+        colors: {
+          bg: getQueryParams('bg') ?? '',
+          qr: getQueryParams('qr') ?? '',
+        },
+      })
 
     setIsGenerated(true)
   }
