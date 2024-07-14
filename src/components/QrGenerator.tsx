@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { toCanvas, toDataURL, toString } from 'qrcode'
+import { QRCodeRenderersOptions, toCanvas } from 'qrcode'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Button } from './Button'
@@ -24,38 +24,33 @@ export const QrGenerator = () => {
   const edit = useModal()
   const { bgColor, qrColor } = useContext(QrColorsContext)
   const { storeInHistory } = useContext(HistoryContext)
-  const { setLinks } = useContext(ShareContext)
+  const { links, updateShareLinks } = useContext(ShareContext)
   const { handleSubmit, register } = useForm<formParams>()
   const { getQueryParams, setQueryParams } = useQueryParams()
 
   useEffect(() => {
     const text = getQueryParams('text')
     if (text) generateQr({ text })
-  })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const generateQr: SubmitHandler<formParams> = async ({ text: textParam, saveInHistory }) => {
-    const qrConfig = {
+  const generateQr: SubmitHandler<formParams> = async ({ text, saveInHistory }) => {
+    const qrConfigs: QRCodeRenderersOptions = {
       width: 216,
       margin: 1,
       color: { dark: qrColor, light: bgColor },
     }
 
-    const queryParams = setQueryParams('text', textParam)
+    const queryParams = setQueryParams('text', text)
 
-    await toCanvas(qrRef.current, textParam, qrConfig)
-    const url = await toDataURL(textParam, qrConfig)
-    const embed = await toString(textParam, qrConfig)
+    await toCanvas(qrRef.current, text, qrConfigs)
 
-    setLinks({
-      dowload: url,
-      embed,
-      whatsapp: location.href,
-    })
+    updateShareLinks(text, qrConfigs)
 
     if (saveInHistory) {
       storeInHistory({
         href: queryParams,
-        text: textParam,
+        text: text,
         colors: {
           bg: getQueryParams('bg') ?? '',
           qr: getQueryParams('qr') ?? '',
@@ -80,7 +75,7 @@ export const QrGenerator = () => {
           </div>
           <div className="flex gap-1">
             <Button
-              className="w-full"
+              className={` w-full ${!links ? 'opacity-80 pointer-events-none user select-none' : ''}`}
               onClick={share.openModal}
               color="dark"
               icon={<Share />}
