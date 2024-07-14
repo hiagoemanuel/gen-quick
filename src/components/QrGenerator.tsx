@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { toCanvas } from 'qrcode'
+import { toCanvas, toDataURL, toString } from 'qrcode'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Button } from './Button'
@@ -13,6 +13,7 @@ import { EditModal } from './EditModal'
 import { QrColorsContext } from '../contexts/QrColorsContext'
 import { useQueryParams } from '../hooks/useQueryParams'
 import { HistoryContext } from '../contexts/HistoryContext'
+import { ShareContext } from '../contexts/ShareContext'
 
 type formParams = { text: string; saveInHistory?: boolean }
 
@@ -23,6 +24,7 @@ export const QrGenerator = () => {
   const edit = useModal()
   const { bgColor, qrColor } = useContext(QrColorsContext)
   const { storeInHistory } = useContext(HistoryContext)
+  const { setLinks } = useContext(ShareContext)
   const { handleSubmit, register } = useForm<formParams>()
   const { getQueryParams, setQueryParams } = useQueryParams()
 
@@ -32,14 +34,25 @@ export const QrGenerator = () => {
   })
 
   const generateQr: SubmitHandler<formParams> = async ({ text: textParam, saveInHistory }) => {
-    await toCanvas(qrRef.current, textParam, {
+    const qrConfig = {
       width: 216,
       margin: 1,
       color: { dark: qrColor, light: bgColor },
-    })
+    }
+
     const queryParams = setQueryParams('text', textParam)
 
-    if (saveInHistory)
+    await toCanvas(qrRef.current, textParam, qrConfig)
+    const url = await toDataURL(textParam, qrConfig)
+    const embed = await toString(textParam, qrConfig)
+
+    setLinks({
+      dowload: url,
+      embed,
+      whatsapp: location.href,
+    })
+
+    if (saveInHistory) {
       storeInHistory({
         href: queryParams,
         text: textParam,
@@ -48,6 +61,7 @@ export const QrGenerator = () => {
           qr: getQueryParams('qr') ?? '',
         },
       })
+    }
 
     setIsGenerated(true)
   }
