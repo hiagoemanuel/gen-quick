@@ -9,6 +9,7 @@ export interface IQrCode {
 
 interface HistoryContextProps {
   storedHistory: IQrCode[]
+  setStoredHistory: (qrcodes: IQrCode[]) => void
   storeInHistory: (storedHistory: IQrCode) => void
 }
 
@@ -38,7 +39,7 @@ export const HistoryProvider = ({ children }: { children: React.ReactNode }) => 
   }
 
   return (
-    <HistoryContext.Provider value={{ storedHistory, storeInHistory }}>
+    <HistoryContext.Provider value={{ storedHistory, storeInHistory, setStoredHistory }}>
       {children}
     </HistoryContext.Provider>
   )
